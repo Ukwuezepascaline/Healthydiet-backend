@@ -25,7 +25,7 @@ export default async function sendEmail(
   try {
     await transporter.sendMail({
       to: recipient,
-      from: `"Dapp Mentors" <notification@dappmentors.com>`,
+      from: `Healthy Diets <notification@healthy-diets.com>`,
       html: body,
       subject,
     });

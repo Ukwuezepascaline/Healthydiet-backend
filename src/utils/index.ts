@@ -15,6 +15,7 @@ const validateEnv = (): void => {
     ORIGIN: url(),
     LOG_LEVEL: str(),
     ACCESS_TOKEN_EXPIRES_IN: str(),
+    VERIFY_ACCOUNT_REDIRECT_URL: str(),
   });
 };
 
