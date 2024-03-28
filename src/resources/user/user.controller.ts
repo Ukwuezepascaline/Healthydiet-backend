@@ -96,6 +96,7 @@ class UserController implements Controller {
 
     try {
       await this.userService.verify(verificationInput);
+      //todo: Get the right redirect url following successful verification
       res.redirect(`${process.env.VERIFY_ACCOUNT_REDIRECT_URL}`);
     } catch (e: any) {
       next(new HttpException(StatusCodes.BAD_REQUEST, e.message));
@@ -136,6 +137,7 @@ class UserController implements Controller {
         resetPasswordQuery,
         resetPasswordBody
       );
+      //todo: coordinate with the frontend team on the appropriate redirect url that will allow users to enter the new password
       res.redirect(`${process.env.VERIFY_ACCOUNT_REDIRECT_URL}`);
     } catch (e: any) {
       next(new HttpException(StatusCodes.BAD_REQUEST, e.message));
