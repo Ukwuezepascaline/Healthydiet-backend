@@ -95,8 +95,8 @@ class UserController implements Controller {
     const verificationInput = req.query;
 
     try {
-      const message = await this.userService.verify(verificationInput);
-      res.status(StatusCodes.OK).json({ msg: message });
+      await this.userService.verify(verificationInput);
+      res.redirect(`${process.env.VERIFY_ACCOUNT_REDIRECT_URL}`);
     } catch (e: any) {
       next(new HttpException(StatusCodes.BAD_REQUEST, e.message));
     }
@@ -132,11 +132,11 @@ class UserController implements Controller {
     const resetPasswordBody = req.body;
 
     try {
-      const message = await this.userService.resetPassword(
+      await this.userService.resetPassword(
         resetPasswordQuery,
         resetPasswordBody
       );
-      res.status(StatusCodes.OK).json({ msg: message });
+      res.redirect(`${process.env.VERIFY_ACCOUNT_REDIRECT_URL}`);
     } catch (e: any) {
       next(new HttpException(StatusCodes.BAD_REQUEST, e.message));
     }

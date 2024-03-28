@@ -15,7 +15,6 @@ import { FilterQuery } from "mongoose";
 
 class UserService {
   private userModel = User;
-  private requestModel = Request;
 
   public async register(userInput: RegisterInterface): Promise<string | Error> {
     try {
