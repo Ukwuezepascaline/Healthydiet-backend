@@ -4,7 +4,9 @@ import BlogService from "./blog.service";
 import isAdmin from "@/middlewares/is.admin.middleware";
 import {
   CreateBlogInterface,
+  DeleteBlogInterface,
   FetchBlogInterface,
+  FetchBlogsInterface,
   UpdateBlogInterface,
 } from "./blog.interface";
 import { HttpException } from "@/utils/exceptions";
@@ -20,7 +22,15 @@ class BlogController implements Controller {
   }
 
   private initialiseRoutes = () => {
-    this.router.post(`${this.path}/create`, [isAdmin], this.createBlog);
+    this.router.post(`${this.path}/create`, isAdmin, this.createBlog);
+
+    this.router.put(`${this.path}/update/:blogId`, isAdmin, this.updateBlog);
+
+    this.router.get(`${this.path}/:slug`, this.fetchBlog);
+
+    this.router.get(`${this.path}`, this.fetchBlogs);
+
+    this.router.delete(`${this.path}/delete/:blogId`, isAdmin, this.deleteBlog);
   };
 
   private createBlog = async (
@@ -78,4 +88,41 @@ class BlogController implements Controller {
       next(new HttpException(StatusCodes.BAD_REQUEST, e.message));
     }
   };
+
+  private fetchBlogs = async (
+    req: Request<{}, {}, {}, FetchBlogsInterface>,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    const queryOptions = req.query;
+
+    try {
+      const result = await this.blogService.fetchBlogs(queryOptions);
+      res.status(StatusCodes.OK).json(result);
+    } catch (e: any) {
+      next(new HttpException(StatusCodes.BAD_REQUEST, e.message));
+    }
+  };
+
+  private deleteBlog = async (
+    req: Request<DeleteBlogInterface>,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    const { blogId } = req.params;
+    const { _id: userId } = res.locals.user;
+
+    try {
+      const message = await this.blogService.deleteBlog(blogId, userId);
+      res.status(StatusCodes.OK).send(message);
+    } catch (e: any) {
+      if (e.message === "User not authorised") {
+        next(new HttpException(StatusCodes.UNAUTHORIZED, e.message));
+      } else {
+        next(new HttpException(StatusCodes.BAD_REQUEST, e.message));
+      }
+    }
+  };
 }
+
+export default BlogController;

@@ -158,7 +158,7 @@ class BlogService {
       }
 
       if (String(blog.userId) !== userId) {
-        throw new Error("Only blog creator can delete this blog");
+        throw new Error("User not authorised");
       }
 
       await this.blogModel.findByIdAndDelete(blogId);
