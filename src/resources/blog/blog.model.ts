@@ -10,6 +10,7 @@ export interface IBlog extends Document {
   updatedAt: Date;
   views: number;
   likes: number;
+  comments: Array<Schema.Types.ObjectId>;
 }
 
 const BlogSchema = new Schema<IBlog>(
@@ -21,6 +22,7 @@ const BlogSchema = new Schema<IBlog>(
     description: { type: String, required: true },
     views: { type: Number, default: 0 },
     likes: { type: Number, default: 0 },
+    comments: Array<{ type: Schema.Types.ObjectId; ref: "Comment" }>,
   },
   { timestamps: true }
 );
