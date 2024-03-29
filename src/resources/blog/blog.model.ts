@@ -5,6 +5,25 @@ export interface IBlog extends Document {
   imageUrl: string;
   overview: string;
   description: string;
+  slug: string;
   createdAt: Date;
   updatedAt: Date;
+  views: number;
+  likes: number;
 }
+
+const BlogSchema = new Schema<IBlog>(
+  {
+    title: { type: String, required: true },
+    slug: { type: String, required: true, unique: true },
+    imageUrl: { type: String, required: true },
+    overview: { type: String, required: true },
+    description: { type: String, required: true },
+    views: { type: Number, default: 0 },
+    likes: { type: Number, default: 0 },
+  },
+  { timestamps: true }
+);
+
+const Blog = model<IBlog>("Blog", BlogSchema);
+export default Blog;
