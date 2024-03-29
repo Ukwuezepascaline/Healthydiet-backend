@@ -44,4 +44,17 @@ const generateAlphanumeric = (charLength: number): string => {
   return result.join("");
 };
 
-export { log, generateAlphanumeric, validateEnv };
+const createSlug = (title: string): string => {
+  let slug = title.toLowerCase();
+
+  // Remove special characters and spaces
+  slug = slug.replace(/[^a-z0-9]+/g, "-");
+
+  // Remove leading and trailing hyphens
+  slug = slug.replace(/^-+|-+$/g, "");
+
+  slug = `${slug}-${generateAlphanumeric(6)}`.toLowerCase();
+  return slug;
+};
+
+export { log, generateAlphanumeric, validateEnv, createSlug };

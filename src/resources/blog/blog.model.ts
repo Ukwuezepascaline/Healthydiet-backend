@@ -11,6 +11,7 @@ export interface IBlog extends Document {
   views: number;
   likes: number;
   comments: Array<Schema.Types.ObjectId>;
+  userId: Schema.Types.ObjectId;
 }
 
 const BlogSchema = new Schema<IBlog>(
@@ -23,6 +24,7 @@ const BlogSchema = new Schema<IBlog>(
     views: { type: Number, default: 0 },
     likes: { type: Number, default: 0 },
     comments: Array<{ type: Schema.Types.ObjectId; ref: "Comment" }>,
+    userId: { type: Schema.Types.ObjectId, ref: "User" },
   },
   { timestamps: true }
 );
