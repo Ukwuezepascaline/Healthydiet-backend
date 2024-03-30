@@ -11,6 +11,8 @@ import {
 } from "./blog.interface";
 import { HttpException } from "@/utils/exceptions";
 import { StatusCodes } from "http-status-codes";
+import validateResource from "@/middlewares/validation.middleware";
+import { createBlogSchema } from "./blog.validation";
 
 class BlogController implements Controller {
   public path = "/blogs";
@@ -22,7 +24,11 @@ class BlogController implements Controller {
   }
 
   private initialiseRoutes = () => {
-    this.router.post(`${this.path}/create`, isAdmin, this.createBlog);
+    this.router.post(
+      `${this.path}/create`,
+      [isAdmin, validateResource(createBlogSchema)],
+      this.createBlog
+    );
 
     this.router.put(`${this.path}/update/:blogId`, isAdmin, this.updateBlog);
 
