@@ -11,10 +11,10 @@ export const createBlogSchema = object({
 
 export const updateBlogSchema = object({
   body: object({
-    title: string({ required_error: "Title is required" }),
-    imageUrl: string({ required_error: "Image Url is required" }),
-    overview: string({ required_error: "Overview is required" }),
-    description: string({ required_error: "Description is required" }),
+    title: string().optional(),
+    imageUrl: string().optional(),
+    overview: string().optional(),
+    description: string().optional(),
   }),
   params: object({
     blogId: string({ required_error: "Blog ID is required" }),

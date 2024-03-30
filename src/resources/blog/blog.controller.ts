@@ -12,7 +12,13 @@ import {
 import { HttpException } from "@/utils/exceptions";
 import { StatusCodes } from "http-status-codes";
 import validateResource from "@/middlewares/validation.middleware";
-import { createBlogSchema } from "./blog.validation";
+import {
+  createBlogSchema,
+  deleteBlogSchema,
+  fetchBlogSchema,
+  fetchBlogsSchema,
+  updateBlogSchema,
+} from "./blog.validation";
 
 class BlogController implements Controller {
   public path = "/blogs";
@@ -30,13 +36,29 @@ class BlogController implements Controller {
       this.createBlog
     );
 
-    this.router.put(`${this.path}/update/:blogId`, isAdmin, this.updateBlog);
+    this.router.put(
+      `${this.path}/update/:blogId`,
+      [isAdmin, validateResource(updateBlogSchema)],
+      this.updateBlog
+    );
 
-    this.router.get(`${this.path}/:slug`, this.fetchBlog);
+    this.router.get(
+      `${this.path}/:slug`,
+      validateResource(fetchBlogSchema),
+      this.fetchBlog
+    );
 
-    this.router.get(`${this.path}`, this.fetchBlogs);
+    this.router.get(
+      `${this.path}`,
+      validateResource(fetchBlogsSchema),
+      this.fetchBlogs
+    );
 
-    this.router.delete(`${this.path}/delete/:blogId`, isAdmin, this.deleteBlog);
+    this.router.delete(
+      `${this.path}/delete/:blogId`,
+      [isAdmin, validateResource(deleteBlogSchema)],
+      this.deleteBlog
+    );
   };
 
   private createBlog = async (
