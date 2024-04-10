@@ -79,7 +79,7 @@ class UserController implements Controller {
       const message = await this.userService.register(userInput);
       res.status(StatusCodes.CREATED).json({ msg: message });
     } catch (e: any) {
-      if (e.code === 11000) {
+      if ((e.message = "Account already exists")) {
         next(new HttpException(StatusCodes.CONFLICT, e.message));
       } else {
         next(new HttpException(StatusCodes.BAD_REQUEST, e.message));
