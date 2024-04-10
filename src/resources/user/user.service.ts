@@ -18,6 +18,10 @@ class UserService {
 
   public async register(userInput: RegisterInterface): Promise<string | Error> {
     try {
+      const existingAccount = await this.userModel.findOne({email: userInput.email});
+      if(existingAccount){
+        throw new Error("Account already exists")
+      }
       // If this is the first user to be created, default userType to Admin. Otherwise, create as User
       const userType =
         (await this.userModel.countDocuments({})) === 0 ? "admin" : "user";
@@ -56,7 +60,8 @@ class UserService {
       }
     } catch (e: any) {
       log.error(e.message);
-      throw new Error(e.code === 11000 ? "Account already exists" : e.message);
+      
+      throw new Error(e.message === "Account already exists" ? "Account already exists" : e.message);
     }
   }
 
